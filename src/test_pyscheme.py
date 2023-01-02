@@ -44,7 +44,7 @@ def test_fibonacci():
     assert evaluate(("fibonacci", 9)) == 55
 
 
-def test_lambda():
+def test_numerals():
     # fmt: off
     zero = (
         "lambda", ("f",),
