@@ -11,7 +11,7 @@ definitions = {
 
 def evaluate(expression):
     # For primitives, return as is.
-    if isinstance(expression, int):
+    if isinstance(expression, int) or callable(expression):
         return expression
 
     # For symbols, do a look-up.
