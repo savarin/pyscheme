@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pyscheme"
+version = "0.1.0"
+description = """
+Minimal implementation of Scheme for Fibonacci generation.
+"""
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Ezzeri Esa", email = "ezzeri.esa@gmail.com" },
+]
+classifiers = [
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+]
+dependencies = [
+]
+
+[project.optional-dependencies]
+dev = [
+    "mypy",
+    "pytest",
+    "ruff",
+]
+
+[tool.hatch.build]
+exclude = [
+    "**/test_*.py",
+]
+
+[tool.ruff]
+target-version = "py312"

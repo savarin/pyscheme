@@ -37,9 +37,7 @@ def evaluate(expression):
                     return value
 
                 elif isinstance(expr, tuple):
-                    return tuple(
-                        [substitute(term, name, value) for term in expr]
-                    )
+                    return tuple([substitute(term, name, value) for term in expr])
 
                 return expr
 

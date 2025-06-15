@@ -83,10 +83,7 @@ def test_numerals():
 
     assert evaluate((("zero", ("lambda", ("x",), ("+", "x", 1))), 0)) == 0
     assert (
-        evaluate(
-            ((("increment", "zero"), ("lambda", ("x",), ("+", "x", 1))), 0)
-        )
-        == 1
+        evaluate(((("increment", "zero"), ("lambda", ("x",), ("+", "x", 1))), 0)) == 1
     )
 
     evaluate(("define", "one", one))
