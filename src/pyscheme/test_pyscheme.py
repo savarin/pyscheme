@@ -1,4 +1,4 @@
-from pyscheme import evaluate
+from pyscheme.pyscheme import evaluate
 
 
 def test_evaluate():
