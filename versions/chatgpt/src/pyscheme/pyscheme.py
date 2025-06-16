@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """pyscheme – Phase 4: observability & inline architecture docs.
 
 This final pass completes the enterprise‑grade transformation by adding
@@ -51,6 +49,7 @@ Enabling debug logs::
     # Now each evaluation will print a concise trace.
 """
 
+from __future__ import annotations
 from typing import Any, Callable, Dict, Iterable, Iterator, Tuple, TypeAlias, Union
 import logging
 
@@ -112,7 +111,9 @@ class Environment:  # noqa: D101 – detailed docstring below
 
     __slots__ = ("_store", "_frozen")
 
-    def __init__(self, initial: Dict[Symbol, Value] | None = None, *, frozen: bool = False) -> None:  # noqa: D401,E501
+    def __init__(
+        self, initial: Dict[Symbol, Value] | None = None, *, frozen: bool = False
+    ) -> None:  # noqa: D401,E501
         self._store: Dict[Symbol, Value] = dict(initial or {})
         self._frozen: bool = frozen
 
@@ -138,7 +139,9 @@ class Environment:  # noqa: D101 – detailed docstring below
     def copy(self, *, frozen: bool | None = None) -> "Environment":
         """Return a *shallow* copy.  Optionally change ``frozen`` flag."""
 
-        return Environment(self._store, frozen=self._frozen if frozen is None else frozen)
+        return Environment(
+            self._store, frozen=self._frozen if frozen is None else frozen
+        )
 
     # --- iteration helpers (useful for tests & debugging) ----------------
     def __iter__(self) -> Iterator[Symbol]:
@@ -212,7 +215,9 @@ class Interpreter:  # noqa: D101 – docstring below
         # Procedure application
         procedure = self.evaluate(head)
         if not callable(procedure):  # pragma: no cover
-            raise InvalidExpressionError(f"Attempted to call non‑callable: {procedure!r}")
+            raise InvalidExpressionError(
+                f"Attempted to call non‑callable: {procedure!r}"
+            )
         args: Iterable[Value] = (self.evaluate(arg) for arg in tail)
         result = procedure(*args)  # type: ignore[arg-type]
         logger.debug("Application %s %s => %s", head, tail, result)
@@ -224,7 +229,9 @@ class Interpreter:  # noqa: D101 – docstring below
 
     def _handle_define(self, args: list[Expression]) -> None:
         if len(args) != 2 or not isinstance(args[0], str):
-            raise InvalidExpressionError("Malformed define; expected ('define', <symbol>, <expr>)")
+            raise InvalidExpressionError(
+                "Malformed define; expected ('define', <symbol>, <expr>)"
+            )
         symbol, value_expr = args
         self._env[symbol] = self.evaluate(value_expr)  # type: ignore[assignment]
         logger.debug("Defined %s", symbol)
@@ -232,14 +239,18 @@ class Interpreter:  # noqa: D101 – docstring below
 
     def _handle_if(self, args: list[Expression]) -> Value:
         if len(args) != 3:
-            raise InvalidExpressionError("Malformed if; expected ('if', <cond>, <then>, <else>)")
+            raise InvalidExpressionError(
+                "Malformed if; expected ('if', <cond>, <then>, <else>)"
+            )
         cond_expr, then_expr, else_expr = args
         branch = then_expr if self.evaluate(cond_expr) else else_expr
         return self.evaluate(branch)
 
     def _handle_lambda(self, args: list[Expression]) -> Procedure:
         if len(args) != 2 or not isinstance(args[0], tuple):
-            raise InvalidExpressionError("Malformed lambda; expected ('lambda', (<params>,), <body>)")
+            raise InvalidExpressionError(
+                "Malformed lambda; expected ('lambda', (<params>,), <body>)"
+            )
         param_names: Tuple[Symbol, ...] = args[0]  # type: ignore[assignment]
         body_expr: Expression = args[1]  # type: ignore[assignment]
 
@@ -247,7 +258,9 @@ class Interpreter:  # noqa: D101 – docstring below
 
         def _procedure(*values: Value) -> Value:  # noqa: D401 – closure
             if len(values) != len(param_names):
-                raise EvaluationError(f"Expected {len(param_names)} args but got {len(values)}")
+                raise EvaluationError(
+                    f"Expected {len(param_names)} args but got {len(values)}"
+                )
             nested = Interpreter(env_snapshot.copy())
             nested._env.update(zip(param_names, values))  # type: ignore[arg-type]
             return nested.evaluate(body_expr)
@@ -273,6 +286,7 @@ class Interpreter:  # noqa: D101 – docstring below
 # ---------------------------------------------------------------------------
 # Global façade – backward compatibility
 # ---------------------------------------------------------------------------
+
 
 def _global_interpreter() -> Interpreter:  # noqa: D401 – helper
     if not hasattr(_global_interpreter, "instance"):

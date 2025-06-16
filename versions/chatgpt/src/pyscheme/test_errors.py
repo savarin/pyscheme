@@ -3,6 +3,7 @@ Error-path and edge-case tests for the enterprise pyscheme interpreter.
 These complement the happy-path suite in `test_pyscheme.py` and drive
 coverage well past the 95 % goal.
 """
+
 import pytest
 
 from pyscheme.pyscheme import (
