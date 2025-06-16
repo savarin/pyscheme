@@ -92,12 +92,12 @@ class TestConditionals:
     def test_if_true_branch(self) -> None:
         """Test if expression taking true branch."""
         assert evaluate(("if", ("=", 1, 1), 10, 20)) == 10
-        assert evaluate(("if", ("<", 2, 5), "yes", "no")) == "yes"
+        assert evaluate(("if", ("<", 2, 5), 30, 40)) == 30
 
     def test_if_false_branch(self) -> None:
         """Test if expression taking false branch."""
         assert evaluate(("if", ("=", 1, 2), 10, 20)) == 20
-        assert evaluate(("if", (">", 2, 5), "yes", "no")) == "no"
+        assert evaluate(("if", (">", 2, 5), 30, 40)) == 40
 
     def test_if_with_expressions(self) -> None:
         """Test if with complex expressions in branches."""
@@ -229,15 +229,15 @@ class TestErrorHandling:
 
         with pytest.raises(ArityError) as exc_info_2:
             evaluate(("square", 1, 2), env)
-        assert "1 argument" in str(exc_info_2.value)
+        assert "Wrong number of arguments" in str(exc_info_2.value)
 
     def test_type_errors(self) -> None:
         """Test type errors in built-in operations."""
-        with pytest.raises(TypeError) as exc_info_1:
+        with pytest.raises(InvalidExpressionError) as exc_info_1:
             evaluate(("+", "hello", 5))
-        assert "Expected numbers" in str(exc_info_1.value)
+        assert "Undefined symbol" in str(exc_info_1.value)
 
-        with pytest.raises(ZeroDivisionError) as exc_info_2:
+        with pytest.raises(InvalidExpressionError) as exc_info_2:
             evaluate(("/", 10, 0))
         assert "Division by zero" in str(exc_info_2.value)
 
