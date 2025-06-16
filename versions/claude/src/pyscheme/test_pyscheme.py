@@ -1,5 +1,6 @@
 """Enhanced test suite for PyScheme with comprehensive coverage."""
 
+from typing import Union
 import pytest
 from pyscheme.pyscheme import (
     evaluate,
@@ -12,17 +13,20 @@ from pyscheme.pyscheme import (
 )
 
 
+ExprType = Union[int, tuple[str, "ExprType", "ExprType"]]
+
+
 class TestBasicEvaluation:
     """Test basic expression evaluation."""
 
-    def test_evaluate_numbers(self):
+    def test_evaluate_numbers(self) -> None:
         """Test evaluation of numeric literals."""
         assert evaluate(42) == 42
         assert evaluate(3.14) == 3.14
         assert evaluate(-10) == -10
         assert evaluate(0) == 0
 
-    def test_evaluate_arithmetic(self):
+    def test_evaluate_arithmetic(self) -> None:
         """Test basic arithmetic operations."""
         assert evaluate(("+", 2, 3)) == 5
         assert evaluate(("-", 10, 4)) == 6
@@ -33,7 +37,7 @@ class TestBasicEvaluation:
         assert evaluate(("+", ("*", 2, 3), 4)) == 10
         assert evaluate(("*", ("+", 1, 2), ("-", 5, 2))) == 9
 
-    def test_evaluate_comparison(self):
+    def test_evaluate_comparison(self) -> None:
         """Test comparison operations."""
         assert evaluate(("=", 5, 5)) is True
         assert evaluate(("=", 5, 6)) is False
@@ -46,7 +50,7 @@ class TestBasicEvaluation:
 class TestVariableDefinition:
     """Test variable definition and lookup."""
 
-    def test_define_and_use(self):
+    def test_define_and_use(self) -> None:
         """Test defining and using variables."""
         env = create_global_environment()
 
@@ -60,7 +64,7 @@ class TestVariableDefinition:
         # Use in expression
         assert evaluate(("+", "x", 8), env) == 50
 
-    def test_redefine_variable(self):
+    def test_redefine_variable(self) -> None:
         """Test redefining variables."""
         env = create_global_environment()
 
@@ -70,7 +74,7 @@ class TestVariableDefinition:
         evaluate(("define", "y", 20), env)
         assert evaluate("y", env) == 20
 
-    def test_define_computed_value(self):
+    def test_define_computed_value(self) -> None:
         """Test defining variables with computed values."""
         env = create_global_environment()
 
@@ -85,17 +89,17 @@ class TestVariableDefinition:
 class TestConditionals:
     """Test if expressions."""
 
-    def test_if_true_branch(self):
+    def test_if_true_branch(self) -> None:
         """Test if expression taking true branch."""
         assert evaluate(("if", ("=", 1, 1), 10, 20)) == 10
         assert evaluate(("if", ("<", 2, 5), "yes", "no")) == "yes"
 
-    def test_if_false_branch(self):
+    def test_if_false_branch(self) -> None:
         """Test if expression taking false branch."""
         assert evaluate(("if", ("=", 1, 2), 10, 20)) == 20
         assert evaluate(("if", (">", 2, 5), "yes", "no")) == "no"
 
-    def test_if_with_expressions(self):
+    def test_if_with_expressions(self) -> None:
         """Test if with complex expressions in branches."""
         env = create_global_environment()
         evaluate(("define", "x", 5), env)
@@ -107,20 +111,20 @@ class TestConditionals:
 class TestLambdaAndProcedures:
     """Test lambda expressions and procedure application."""
 
-    def test_simple_lambda(self):
+    def test_simple_lambda(self) -> None:
         """Test basic lambda creation and application."""
         square = evaluate(("lambda", ("x",), ("*", "x", "x")))
         assert callable(square)
         assert square(5) == 25
         assert square(-3) == 9
 
-    def test_multi_arg_lambda(self):
+    def test_multi_arg_lambda(self) -> None:
         """Test lambda with multiple arguments."""
         add3 = evaluate(("lambda", ("x", "y", "z"), ("+", ("+", "x", "y"), "z")))
         assert add3(1, 2, 3) == 6
         assert add3(10, 20, 30) == 60
 
-    def test_lambda_closure(self):
+    def test_lambda_closure(self) -> None:
         """Test that lambdas capture their environment."""
         env = create_global_environment()
         evaluate(("define", "a", 10), env)
@@ -133,7 +137,7 @@ class TestLambdaAndProcedures:
         evaluate(("define", "a", 20), env)
         assert add_a(5) == 25
 
-    def test_higher_order_functions(self):
+    def test_higher_order_functions(self) -> None:
         """Test functions that return functions."""
         # Create a function that returns a function
         make_adder = evaluate(("lambda", ("n",), ("lambda", ("x",), ("+", "x", "n"))))
@@ -148,7 +152,7 @@ class TestLambdaAndProcedures:
 class TestErrorHandling:
     """Test error conditions and error messages."""
 
-    def test_undefined_symbol(self):
+    def test_undefined_symbol(self) -> None:
         """Test accessing undefined symbols."""
         env = create_global_environment()
 
@@ -157,38 +161,38 @@ class TestErrorHandling:
         assert "undefined_var" in str(exc_info.value)
         assert "Available symbols" in str(exc_info.value)
 
-    def test_invalid_define(self):
+    def test_invalid_define(self) -> None:
         """Test invalid define forms."""
         env = create_global_environment()
 
         # Wrong number of arguments
-        with pytest.raises(ArityError) as exc_info:
+        with pytest.raises(ArityError) as exc_info_1:
             evaluate(("define", "x"), env)
-        assert "2 arguments" in str(exc_info.value)
+        assert "2 arguments" in str(exc_info_1.value)
 
         # Non-symbol as first argument
-        with pytest.raises(InvalidExpressionError) as exc_info:
+        with pytest.raises(InvalidExpressionError) as exc_info_2:
             evaluate(("define", 123, 456), env)
-        assert "symbol" in str(exc_info.value)
+        assert "symbol" in str(exc_info_2.value)
 
         # Empty symbol name
-        with pytest.raises(InvalidExpressionError) as exc_info:
+        with pytest.raises(InvalidExpressionError) as exc_info_3:
             evaluate(("define", "", 42), env)
-        assert "empty" in str(exc_info.value)
+        assert "empty" in str(exc_info_3.value)
 
         # Redefining special forms
-        with pytest.raises(InvalidExpressionError) as exc_info:
+        with pytest.raises(InvalidExpressionError) as exc_info_4:
             evaluate(("define", "if", 42), env)
-        assert "special form" in str(exc_info.value)
+        assert "special form" in str(exc_info_4.value)
 
-    def test_invalid_if(self):
+    def test_invalid_if(self) -> None:
         """Test invalid if forms."""
         # Wrong number of arguments
         with pytest.raises(ArityError) as exc_info:
             evaluate(("if", True, 1))
         assert "3 arguments" in str(exc_info.value)
 
-    def test_invalid_lambda(self):
+    def test_invalid_lambda(self) -> None:
         """Test invalid lambda forms."""
         # Wrong number of arguments
         with pytest.raises(ArityError):
@@ -209,39 +213,39 @@ class TestErrorHandling:
             evaluate(("lambda", ("x", "y", "x"), ("+", "x", "y")))
         assert "Duplicate" in str(exc_info.value)
 
-    def test_invalid_application(self):
+    def test_invalid_application(self) -> None:
         """Test invalid procedure applications."""
         env = create_global_environment()
 
         # Applying non-procedure
         evaluate(("define", "not_a_proc", 42), env)
-        with pytest.raises(InvalidExpressionError) as exc_info:
+        with pytest.raises(InvalidExpressionError) as exc_info_1:
             evaluate(("not_a_proc", 1, 2), env)
-        assert "non-procedure" in str(exc_info.value)
+        assert "non-procedure" in str(exc_info_1.value)
 
         # Wrong number of arguments
         square = evaluate(("lambda", ("x",), ("*", "x", "x")), env)
         evaluate(("define", "square", square), env)
 
-        with pytest.raises(ArityError) as exc_info:
+        with pytest.raises(ArityError) as exc_info_2:
             evaluate(("square", 1, 2), env)
-        assert "1 argument" in str(exc_info.value)
+        assert "1 argument" in str(exc_info_2.value)
 
-    def test_type_errors(self):
+    def test_type_errors(self) -> None:
         """Test type errors in built-in operations."""
-        with pytest.raises(TypeError) as exc_info:
+        with pytest.raises(TypeError) as exc_info_1:
             evaluate(("+", "hello", 5))
-        assert "Expected numbers" in str(exc_info.value)
+        assert "Expected numbers" in str(exc_info_1.value)
 
-        with pytest.raises(ZeroDivisionError) as exc_info:
+        with pytest.raises(ZeroDivisionError) as exc_info_2:
             evaluate(("/", 10, 0))
-        assert "Division by zero" in str(exc_info.value)
+        assert "Division by zero" in str(exc_info_2.value)
 
 
 class TestComplexPrograms:
     """Test more complex Scheme programs."""
 
-    def test_factorial(self):
+    def test_factorial(self) -> None:
         """Test recursive factorial function."""
         env = create_global_environment()
 
@@ -258,7 +262,7 @@ class TestComplexPrograms:
         assert evaluate(("factorial", 5), env) == 120
         assert evaluate(("factorial", 10), env) == 3628800
 
-    def test_fibonacci_recursive(self):
+    def test_fibonacci_recursive(self) -> None:
         """Test recursive Fibonacci with memoization."""
         env = create_global_environment()
 
@@ -287,7 +291,7 @@ class TestComplexPrograms:
         assert evaluate(("fib-memo", 10), env) == 89
         assert evaluate(("fib-memo", 15), env) == 987
 
-    def test_nested_environments(self):
+    def test_nested_environments(self) -> None:
         """Test nested lexical scoping."""
         env = create_global_environment()
 
@@ -314,7 +318,7 @@ class TestComplexPrograms:
 class TestMemoization:
     """Test memoization functionality."""
 
-    def test_memoize_simple_function(self):
+    def test_memoize_simple_function(self) -> None:
         """Test memoizing a simple function."""
         call_count = 0
 
@@ -337,10 +341,10 @@ class TestMemoization:
         assert memoized(4, 5) == 9
         assert call_count == 2
 
-    def test_memoize_with_unhashable_args(self):
+    def test_memoize_with_unhashable_args(self) -> None:
         """Test memoization with unhashable arguments."""
 
-        def list_sum(lst: list) -> int:
+        def list_sum(lst: list[int]) -> int:
             return sum(lst)
 
         memoized = make_memoized(list_sum)
@@ -353,37 +357,37 @@ class TestMemoization:
 class TestEdgeCases:
     """Test edge cases and boundary conditions."""
 
-    def test_empty_expression(self):
+    def test_empty_expression(self) -> None:
         """Test evaluating empty tuple."""
         with pytest.raises(InvalidExpressionError) as exc_info:
             evaluate(())
         assert "empty expression" in str(exc_info.value)
 
-    def test_none_expression(self):
+    def test_none_expression(self) -> None:
         """Test evaluating None."""
         with pytest.raises(InvalidExpressionError) as exc_info:
             validate_expression(None)
         assert "cannot be None" in str(exc_info.value)
 
-    def test_deeply_nested_expressions(self):
+    def test_deeply_nested_expressions(self) -> None:
         """Test deeply nested arithmetic expressions."""
         # Create a deeply nested expression
-        expr = 1
+        expr: ExprType = 1
         for i in range(10):
             expr = ("+", expr, i)
 
         result = evaluate(expr)
         assert result == sum(range(10)) + 1  # 1 + 0 + 1 + 2 + ... + 9
 
-    def test_invalid_expression_types(self):
+    def test_invalid_expression_types(self) -> None:
         """Test handling of invalid expression types."""
         with pytest.raises(InvalidExpressionError):
-            evaluate([1, 2, 3])  # Lists not supported
+            evaluate([1, 2, 3])  # type: ignore[arg-type]
 
         with pytest.raises(InvalidExpressionError):
-            evaluate({"a": 1})  # Dicts not supported
+            evaluate({"a": 1})  # type: ignore[arg-type]
 
-    def test_function_as_value(self):
+    def test_function_as_value(self) -> None:
         """Test treating functions as first-class values."""
         env = create_global_environment()
 
