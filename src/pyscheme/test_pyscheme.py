@@ -158,3 +158,99 @@ def test_if():
 
     assert evaluate(((("if_procedure", "true"), 2), 3)) == 2
     assert evaluate(((("if_procedure", "false"), 2), 3)) == 3
+
+
+def test_fibonacci_lambda_calculus():
+    """
+    Compute Fibonacci numbers using pure lambda calculus.
+
+    This demonstrates computing Fibonacci using ONLY lambda calculus constructs:
+    - Church numerals for representing numbers
+    - Pairs (cons/car/cdr) for state
+    - Church numeral iteration (no explicit recursion)
+
+    The algorithm:
+    1. Start with pair (fib(0), fib(1)) = (0, 1)
+    2. Apply FIB_STEP: (a, b) -> (b, a+b) n times
+    3. Extract first element to get fib(n)
+    """
+
+    # Church booleans for pair selectors
+    # fmt: off
+    TRUE = ("lambda", ("x",), ("lambda", ("y",), "x"))
+    FALSE = ("lambda", ("x",), ("lambda", ("y",), "y"))
+
+    # Pairs using Church encoding
+    CONS = (
+        "lambda", ("x",),
+        ("lambda", ("y",), ("lambda", ("m",), (("m", "x"), "y")))
+    )
+    CAR = ("lambda", ("z",), ("z", "TRUE"))
+    CDR = ("lambda", ("z",), ("z", "FALSE"))
+
+    # Church numerals
+    ZERO = ("lambda", ("f",), ("lambda", ("x",), "x"))
+    ONE = ("lambda", ("f",), ("lambda", ("x",), ("f", "x")))
+    TWO = ("lambda", ("f",), ("lambda", ("x",), ("f", ("f", "x"))))
+    SUCC = (
+        "lambda", ("n",),
+        ("lambda", ("f",), ("lambda", ("x",), ("f", (("n", "f"), "x"))))
+    )
+    ADD = (
+        "lambda", ("m",),
+        ("lambda", ("n",),
+            ("lambda", ("f",),
+                ("lambda", ("x",), (("m", "f"), (("n", "f"), "x")))))
+    )
+
+    # Fibonacci using iterative pair transformation
+    # FIB_STEP: (a, b) -> (b, a+b)
+    FIB_STEP = (
+        "lambda", ("p",),
+        (("CONS", ("CDR", "p")), (("ADD", ("CAR", "p")), ("CDR", "p")))
+    )
+    FIB_INIT = (("CONS", "ZERO"), "ONE")
+    FIB = ("lambda", ("n",), ("CAR", (("n", "FIB_STEP"), "FIB_INIT")))
+
+    # Conversion helper (only for testing assertions)
+    TO_INT = ("lambda", ("n",), (("n", ("lambda", ("x",), ("+", "x", 1))), 0))
+    # fmt: on
+
+    # Define all primitives
+    evaluate(("define", "TRUE", TRUE))
+    evaluate(("define", "FALSE", FALSE))
+    evaluate(("define", "CONS", CONS))
+    evaluate(("define", "CAR", CAR))
+    evaluate(("define", "CDR", CDR))
+    evaluate(("define", "ZERO", ZERO))
+    evaluate(("define", "ONE", ONE))
+    evaluate(("define", "TWO", TWO))
+    evaluate(("define", "SUCC", SUCC))
+    evaluate(("define", "ADD", ADD))
+    evaluate(("define", "FIB_STEP", FIB_STEP))
+    evaluate(("define", "FIB_INIT", FIB_INIT))
+    evaluate(("define", "FIB", FIB))
+    evaluate(("define", "TO_INT", TO_INT))
+
+    # Build Church numerals for testing
+    THREE = ("SUCC", "TWO")
+    FOUR = ("SUCC", THREE)
+    FIVE = ("SUCC", FOUR)
+    SIX = ("SUCC", FIVE)
+    SEVEN = ("SUCC", SIX)
+    EIGHT = ("SUCC", SEVEN)
+    NINE = ("SUCC", EIGHT)
+    TEN = ("SUCC", NINE)
+
+    # Test Fibonacci sequence: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55
+    assert evaluate(("TO_INT", ("FIB", "ZERO"))) == 0
+    assert evaluate(("TO_INT", ("FIB", "ONE"))) == 1
+    assert evaluate(("TO_INT", ("FIB", "TWO"))) == 1
+    assert evaluate(("TO_INT", ("FIB", THREE))) == 2
+    assert evaluate(("TO_INT", ("FIB", FOUR))) == 3
+    assert evaluate(("TO_INT", ("FIB", FIVE))) == 5
+    assert evaluate(("TO_INT", ("FIB", SIX))) == 8
+    assert evaluate(("TO_INT", ("FIB", SEVEN))) == 13
+    assert evaluate(("TO_INT", ("FIB", EIGHT))) == 21
+    assert evaluate(("TO_INT", ("FIB", NINE))) == 34
+    assert evaluate(("TO_INT", ("FIB", TEN))) == 55
