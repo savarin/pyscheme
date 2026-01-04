@@ -1,0 +1,1057 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>1 week with David Beazley and SICP</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="4c440389-cf1e-43f4-8fe6-7c969967f655" class="page sans"><header><img class="page-cover-image" src="1%20week%20with%20David%20Beazley%20and%20SICP/sicp.png" style="object-position:center 20.87%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">🟧</span></div><h1 class="page-title" dir="auto">1 week with David Beazley and SICP</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><div style="display:contents" dir="auto"><p id="1cf1308b-4204-8072-8aae-f0ed36a260b6" class=""><em>Author&#x27;s note: Hacker News comments </em><em><a href="https://news.ycombinator.com/item?id=42164541">here</a></em><em>.</em></p></div><div style="display:contents" dir="auto"><p id="1cf1308b-4204-802f-95f0-fa706a01dd34" class="">
+</p></div><div style="display:contents" dir="auto"><p id="efc51075-24f6-4632-9681-3ab2237f4091" class="">I had the chance to do David Beazley’s <a href="https://www.dabeaz.com/sicp.html">SICP course</a> towards the end of 2022. I have only good things to say.</p></div><div style="display:contents" dir="auto"><p id="1999a836-b069-4911-b6a2-980baab87409" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1d920363-c4fb-4c5e-ab8a-37ef1cd34238" class="">There are a lot of free resources out there <a href="https://www.notion.so/1-week-with-David-Beazley-and-SICP-4c440389cf1e43f48fe67c969967f655?pvs=21">[1]</a>. Having Dave as a guide, I was amazed at how much we covered in a week. I loved how he cherry-picked topics for the high-level overview, but takes the time to hone in on critical sections. In some cases, Dave even comes up with his own examples to more clearly illustrate concepts being discussed.</p></div><div style="display:contents" dir="auto"><p id="e4cb229c-1923-46b5-be5c-99cbcf5b3258" class="">
+</p></div><div style="display:contents" dir="auto"><p id="6747fc3c-0961-4d4c-b048-e0f0ea3875ef" class="">What did I learn? It’s hard to describe. I’ll explain by analogy. When I learned about compilers, I discovered that languages have much more in common than I realized; I now see the big picture <a href="https://www.notion.so/1-week-with-David-Beazley-and-SICP-4c440389cf1e43f48fe67c969967f655?pvs=21">[2]</a>. With SICP it’s a bit like that, but with the idea of computation more generally.</p></div><div style="display:contents" dir="auto"><p id="135f728c-4193-4413-92ae-d5de7c0fa454" class="">
+</p></div><div style="display:contents" dir="auto"><p id="be7b0024-915f-48c5-a7a5-0694b46bb114" class="">Let’s review a few key concepts, and then go into what I found especially mind-blowing.</p></div><div style="display:contents" dir="auto"><h1 id="f27bc090-2eb7-4483-8186-487a2b09f915" class="">Starting point</h1></div><div style="display:contents" dir="auto"><p id="aa820f83-691e-44ca-94b4-3213131aa896" class="">In this section, we build a simple model of computation through the process of substitution. We start with a quick review of Scheme (the language used in SICP), next build a Scheme interpreter in Python, and then take a closer look at substitution.</p></div><div style="display:contents" dir="auto"><h3 id="926c8719-01d6-42ac-bac9-d14cdfdad3c0" class="">Scheme</h3></div><div style="display:contents" dir="auto"><p id="8a9b57d1-149e-419d-8ea7-ccdae469cb9a" class=""><a href="https://en.wikipedia.org/wiki/Scheme_(programming_language)">Scheme</a> is a dialect of <a href="https://en.wikipedia.org/wiki/Lisp_(programming_language)">Lisp</a>. For the course we actually used <a href="https://en.wikipedia.org/wiki/Racket_(programming_language)">Racket</a>, which is similar but easier to set up <a href="https://www.notion.so/1-week-with-David-Beazley-and-SICP-4c440389cf1e43f48fe67c969967f655?pvs=21">[3]</a>. For our purposes we only need a small part of the language; here Scheme and Racket coincide. The <code>&gt;</code> in this subsection represents the Scheme REPL.</p></div><div style="display:contents" dir="auto"><p id="83ebc154-bfd9-4a2e-b34d-c985b705eebf" class="">
+</p></div><div style="display:contents" dir="auto"><p id="6e466513-fd82-42fc-8f16-7594c2d5dc95" class="">Primitives are the simplest entities in the language. We only need integers. When evaluated we simply get it back.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="74e7d259-7045-4578-b5aa-6e6bac93463a" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; 1
+1</code></pre></div><div style="display:contents" dir="auto"><p id="4bbf7183-651c-45e3-8eaf-9f5b0ebbc2c9" class="">
+</p></div><div style="display:contents" dir="auto"><p id="84d76c1c-bdce-4138-9215-18ac85509945" class="">For built-in operations, we need <code>+</code>, <code>-</code>, <code>*</code> and <code>/</code>. Scheme uses prefix notation, where the operator appears first and then the operands. The example here illustrates adding <code>2</code> and <code>3</code>.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f82d2f48-f00e-405b-9d12-d3ff422ad90e" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; (+ 2 3)
+5</code></pre></div><div style="display:contents" dir="auto"><p id="5fce21bd-8fe6-459b-b77c-35b2b83b707c" class="">
+</p></div><div style="display:contents" dir="auto"><p id="a5681c6a-8795-41e9-99a3-a1db2a346f68" class="">Next we have special forms. The first one we need is <code>define</code>, which lets us define variables. Here we define <code>x</code> to be <code>2</code>.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7b098caa-119f-4617-9dfc-a406b19fd57a" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; (define x 2)
+
+&gt; (+ x 3)
+5</code></pre></div><div style="display:contents" dir="auto"><p id="123628c5-4488-4816-b59d-b5b2bacc3977" class="">
+</p></div><div style="display:contents" dir="auto"><p id="e064da79-4ea4-451f-b9d3-e02879546a6f" class="">We need <code>if</code> for control flow, and thus include the built-ins <code>=</code>, <code>&gt;</code> and <code>&lt;</code>.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="dffccb1a-9d21-4edf-aea8-a071e59b6cbd" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; (if (= 1 1) 2 3)
+2
+
+&gt; (if (= 0 1) 2 3)
+3</code></pre></div><div style="display:contents" dir="auto"><p id="e4270036-d2cd-4ddd-9325-4d0188420c47" class="">
+</p></div><div style="display:contents" dir="auto"><p id="0fe547ec-c9e7-470f-9228-885abd24676a" class="">Finally we have <code>lambda</code> for functions. In this example, we apply to <code>3</code> an operation that multiplies a number with itself.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b5ea557a-af8d-420d-a6c4-c71633acbae4" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; ((lambda (x) (* x x)) 3)
+9</code></pre></div><div style="display:contents" dir="auto"><p id="fb82c7bd-1e5e-46ad-8407-cc37474631f0" class="">
+</p></div><div style="display:contents" dir="auto"><p id="68130016-abe9-486f-9d26-cd460f7b1a9a" class="">By combining <code>define</code> and <code>lambda</code>, we can create user-defined functions. Here we bind the operation in the previous example to <code>square</code>.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="51a31ccc-87e3-4a30-be13-c4a6cb796f0f" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; (define square (lambda (x) (* x x)))
+
+&gt; (square 3)
+9</code></pre></div><div style="display:contents" dir="auto"><p id="ae98c898-035c-48f2-bf89-5533e032d336" class=""> </p></div><div style="display:contents" dir="auto"><p id="529c2a7b-c414-4623-bdde-e5c0749f5dbe" class="">We present these here for use in later sections. The special form <code>cons</code> lets you create data pairs. The first item in the pair is accessed with <code>car</code>, the remainder with <code>cdr</code> <a href="https://www.notion.so/1-week-with-David-Beazley-and-SICP-4c440389cf1e43f48fe67c969967f655?pvs=21">[4]</a>.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2d891ea2-4be9-4b1f-996b-3dbd4322725a" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; (define pair (cons 1 2))
+
+&gt; (car pair)
+1
+
+&gt; (cdr pair)
+2</code></pre></div><div style="display:contents" dir="auto"><p id="e5676316-be07-43c4-b934-8ed66c72ca9a" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="5c64d6da-99d8-44e8-89cc-09c6fd893043" class="">Scheme interpreter in Python</h3></div><div style="display:contents" dir="auto"><p id="fb3499ef-446a-47fb-a5b5-489ef93d6ac5" class="">How do we write a Python function that takes in Scheme source code and returns what Scheme would return? The <code>&gt;</code> in this subsection represents the Python REPL.</p></div><div style="display:contents" dir="auto"><p id="8402fc89-1833-4601-b66c-d497d7fe79f2" class="">
+</p></div><div style="display:contents" dir="auto"><p id="d97ae2cc-1d0a-4de0-a356-083f3e3b340a" class="">For primitives, we return as-is.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="dce37738-99f1-4855-a58a-e3e7a74bdcba" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">def evaluate(expression):
+    if isinstance(expression, int):
+        return expression</code></pre></div><div style="display:contents" dir="auto"><p id="687035dd-77c9-43c2-a431-65975b2d9107" class="">
+</p></div><div style="display:contents" dir="auto"><p id="426632ff-9e31-4df6-9fbc-a4b10e69f6c7" class="">Ditto.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="532e3d16-f4c7-46c7-a27b-b78ea094b9f1" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">&gt; evaluate(1)
+1</code></pre></div><div style="display:contents" dir="auto"><p id="004d2eb7-5fab-4eba-96d7-e452e0d04040" class="">
+</p></div><div style="display:contents" dir="auto"><p id="6aa40012-7d53-4a93-86cc-8ac4fcfd4fe4" class="">To keep things simple, we represent Scheme source in parentheses with Python tuples. </p></div><div style="display:contents" dir="auto"><p id="48fb0c43-07f0-48d5-b4cc-d4aff837198f" class="">
+</p></div><div style="display:contents" dir="auto"><p id="0294aaa2-2b0f-4335-b8c3-20e1f70ec9f3" class="">Now let’s do built-in operations. The first item in the tuple is the operator (as a string); we do a look up in <code>definitions</code> and substitute. Next we evaluate all arguments before applying the operator (in function form).</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f5755ae6-6b03-4c9d-b762-3047a08193e2" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">definitions = {
+    &quot;+&quot;: lambda x, y: x + y,
+    &quot;*&quot;: lambda x, y: x * y,
+    &quot;-&quot;: lambda x, y: x - y,
+    &quot;/&quot;: lambda x, y: x / y,
+}
+
+def evaluate(expression):
+    ...
+    
+    elif isinstance(expression, str):
+        return definitions[expression]
+
+    elif isinstance(expression, tuple):
+        proc = evaluate(expression[0])
+        args = [evaluate(expr) for expr in expression[1:]]
+    
+        return proc(*args)</code></pre></div><div style="display:contents" dir="auto"><p id="4c86675f-9518-4a63-b4f8-8f938adae21b" class="">
+</p></div><div style="display:contents" dir="auto"><p id="9e55000f-d9ad-4e73-8c45-676d808cfbef" class="">Here we illustrate the evaluation of <code>(+ 2 3)</code>. The red highlight shows the result after each step.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="91c886e5-4189-4588-8e6b-490dfd87b758" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">&gt; evaluate((&quot;+&quot;, 2, 3))
+# evaluate(&quot;+&quot;)(*[evaluate(expr) for expr in (2, 3)])
+# definitions[&quot;+&quot;](*[evaluate(expr) for expr in (2, 3)])
+# (lambda x, y: x + y)(*[evaluate(expr) for expr in (2, 3)])
+# (lambda x, y: x + y)(*[evaluate(2), evaluate(3)])
+# (lambda x, y: x + y)(*[2, evaluate(3)])
+# (lambda x, y: x + y)(*[2, 3)])
+# 2 + 3
+5</code></pre></div><div style="display:contents" dir="auto"><p id="36bd9917-1cf7-443b-aaee-394868d36713" class="">
+</p></div><div style="display:contents" dir="auto"><p id="dd6ddaf5-b5e8-44d9-873f-a81568906d89" class="">With <code>define</code>, we evaluate the expression and then store the name-result pair in <code>definitions</code>.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="56f5c58a-31c6-4141-ad26-14105c92032e" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">def evaluate(expression):
+    ...
+
+    elif isinstance(expression, tuple):
+        if expression[0] == &quot;define&quot;:
+            definitions[expression[1]] = evaluate(expression[2])
+            return None
+
+        ...</code></pre></div><div style="display:contents" dir="auto"><p id="fe201522-4274-432b-90df-7df82eac1d76" class="">
+</p></div><div style="display:contents" dir="auto"><p id="29b2eca5-c820-4ccb-a8c5-1430c0f11c4d" class="">When called, we get the value from <code>definitions</code> and substitute into the expression. For simplicity, we use <code>definitions</code> for both built-ins and <code>define</code> operations.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="229602ed-9ecc-493a-9264-cf567b356aa1" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">&gt; evaluate((&quot;define&quot;, &quot;x&quot;, 2))
+# definitions[&quot;x&quot;] = 2
+None
+
+&gt; evaluate((&quot;+&quot;, &quot;x&quot;, 3))
+# evaluate(&quot;+&quot;)(*[evaluate(expr) for expr in (&quot;x&quot;, 3)])
+# definitions[&quot;+&quot;](*[evaluate(expr) for expr in (&quot;x&quot;, 3)])
+# (lambda x, y: x + y)(*[evaluate(expr) for expr in (&quot;x&quot;, 3)])
+# (lambda x, y: x + y)(*[evaluate(&quot;x&quot;), evaluate(3)])
+# (lambda x, y: x + y)(*[definitions[&quot;x&quot;], evaluate(3)])
+# (lambda x, y: x + y)(*[2, evaluate(3)])
+# (lambda x, y: x + y)(*[2, 3])
+5</code></pre></div><div style="display:contents" dir="auto"><p id="3c5caa53-b98e-42cf-ade4-67a614ecb103" class="">
+</p></div><div style="display:contents" dir="auto"><p id="59639712-1a21-4245-a3f0-eb2a79d17b3b" class="">For <code>if</code>, suppose we have the form <code>(if predicate then else)</code>. If the <code>predicate</code> is true, we evaluate the <code>then</code> clause and return the result. Otherwise evaluate the <code>else</code> clause and return the result.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8a1c91c6-fa6b-407a-ac0e-643b35f68282" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">definitions = {
+    ...
+    &quot;=&quot;: lambda x, y: x == y,
+    &quot;&lt;&quot;: lambda x, y: x &lt; y,
+    &quot;&gt;&quot;: lambda x, y: x &gt; y,
+}
+
+def evaluate(expression):
+    ...
+    
+
+    elif isinstance(expression, tuple):
+        ...
+
+        elif expression[0] == &quot;if&quot;:
+            if evaluate(expression[1]):
+                return evaluate(expression[2])
+            
+            return evaluate(expression[3])
+    </code></pre></div><div style="display:contents" dir="auto"><p id="8d360020-f6ec-465c-97a9-9f49d3f45a79" class="">
+</p></div><div style="display:contents" dir="auto"><p id="706a0b63-d73f-44ec-a143-e1aa98c8c762" class="">In this example, we return <code>2</code> when true and otherwise return <code>3</code>. </p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d4b59c42-d090-4ba4-96b4-d0d922697c51" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">&gt; evaluate((&quot;if&quot;, (&quot;=&quot;, 1, 1), 2, 3))
+# evaluate(2) if evaluate((&quot;=&quot;, 1, 1)) else evaluate(3)
+# evaluate(2) if True else evaluate(3)
+# evaluate(2)
+2
+
+&gt; evaluate((&quot;if&quot;, (&quot;=&quot;, 0, 1), 2, 3))
+# evaluate(2) if evaluate((&quot;=&quot;, 1, 1)) else evaluate(3)
+# evaluate(2) if False else evaluate(3)
+# evaluate(3)
+3</code></pre></div><div style="display:contents" dir="auto"><p id="9d84cfff-93cd-4b00-88f8-fe9b2204ccc4" class="">
+</p></div><div style="display:contents" dir="auto"><p id="f46cb040-8396-449c-926b-5013ecf7872f" class="">Functions take a bit more work. The basic idea is to substitute the values of the arguments in the function body, and then evaluate the resulting expression. This process is repeated until the final result is obtained.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="070a4c3c-7ed6-4b40-ba01-2c53eccaa6a7" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">def evaluate(expression):
+    ...
+
+    elif isinstance(expression, tuple):
+        ...
+
+        elif expression[0] == &quot;lambda&quot;:
+
+            def substitute(expr, name, value):
+                if expr == name:
+                    return value
+
+                elif isinstance(expr, tuple):
+                    return tuple(
+                        [substitute(term, name, value) for term in expr]
+                    )
+
+                return expr
+
+            def procedure(*arguments):
+                names = expression[1]
+                body = expression[2]
+
+                for i, argument in enumerate(arguments):
+                    name = names[i]
+                    body = substitute(body, name, argument)
+
+                return evaluate(body)
+
+            return procedure
+
+        ...
+    </code></pre></div><div style="display:contents" dir="auto"><p id="69dbf612-f327-45aa-83bb-c3d6032c9995" class="">
+</p></div><div style="display:contents" dir="auto"><p id="98cca740-f8c1-4c24-a178-aa878bce72d0" class="">In this example, applying the operation that multiplies a number with itself runs the for loop only once. This has the effect of substituting <code>x</code> in the function body with <code>3</code>.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="42783b1e-6198-4387-a570-07a38b802d8f" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">&gt; evaluate(((&quot;lambda&quot;, (&quot;x&quot;,) (&quot;*&quot;, &quot;x&quot;, &quot;x&quot;)), 3))
+# evaluate((&quot;lambda&quot;, (&quot;x&quot;,) (&quot;*&quot;, &quot;x&quot;, &quot;x&quot;)))(*[evaluate(expr) for expr in (3,)])
+# evaluate((&quot;lambda&quot;, (&quot;x&quot;,) (&quot;*&quot;, &quot;x&quot;, &quot;x&quot;)))(*[3])
+# evaluate(substitute((&quot;*&quot;, &quot;x&quot;, &quot;x&quot;), &quot;x&quot;, 3))
+# evaluate((&quot;*&quot;, 3, 3))
+# 3 * 3
+9</code></pre></div><div style="display:contents" dir="auto"><p id="05e407c9-b1e5-4281-ae6f-c847892522fc" class="">
+</p></div><div style="display:contents" dir="auto"><p id="819afe55-36e7-4528-b413-1023cf92719f" class="">For user-defined functions, declaring the function stores it in <code>definitions</code>. The substitution is deferred until the function is called with arguments. When this happens we proceed as before, obtaining the same result.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ff38d5b1-94d6-4f1a-8406-5f5061d45ca6" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">&gt; evaluate((&quot;define&quot;, &quot;square&quot;, (&quot;lambda&quot;, (&quot;x&quot;,) (&quot;*&quot;, &quot;x&quot;, &quot;x&quot;))))
+# definitions[&quot;square&quot;] = evaluate((&quot;lambda&quot;, (&quot;x&quot;,) (&quot;*&quot;, &quot;x&quot;, &quot;x&quot;)))
+None
+
+&gt; evaluate((&quot;square&quot;, 3))
+# evaluate(&quot;square&quot;)(*[evaluate(expr) for expr in [3])
+# definitions[&quot;square&quot;](*[evaluate(expr) for expr in [3])
+# evaluate((&quot;lambda&quot;, (&quot;x&quot;,) (&quot;*&quot;, &quot;x&quot;, &quot;x&quot;)))(*[evaluate(expr) for expr in (3,)])
+9</code></pre></div><div style="display:contents" dir="auto"><p id="e28d694e-6c1c-4e83-96cd-f481ac96e3b2" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="8ec7c87e-2c0f-4414-9ba3-a5781754696a" class="">The substitution model</h3></div><div style="display:contents" dir="auto"><p id="22c5411d-2cab-45b1-81ea-475d661fe69f" class="">Learning compilers often involves creating a toy language. To wrap my head around how it works, I implemented a minimal <a href="https://github.com/savarin/minimal-lox">version</a> that allows Fibonacci number generation. It’s a nice use case, requiring built-in operations, control flow and recursive function calls (twice!).</p></div><div style="display:contents" dir="auto"><p id="61c8900b-8c31-4b0c-bbee-4279af044a63" class="">
+</p></div><div style="display:contents" dir="auto"><p id="a1c67aae-c775-482e-8850-43227e201158" class="">I was impressed how our previous construction can be used to generate Fibonacci numbers.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d6399fdd-145d-434f-8bcd-ed9263806f7f" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">fibonacci = (
+    &quot;lambda&quot;, (&quot;n&quot;,),
+    (
+        &quot;if&quot;, (&quot;&lt;&quot;, &quot;n&quot;, 2),
+	          1,
+            (&quot;+&quot;, (&quot;fibonacci&quot;, (&quot;-&quot;, &quot;n&quot;, 2)), (&quot;fibonacci&quot;, (&quot;-&quot;, &quot;n&quot;, 1))),
+    ),
+)</code></pre></div><div style="display:contents" dir="auto"><p id="8d05686a-bbb0-40fb-9d27-6bac6aaca2aa" class="">
+</p></div><div style="display:contents" dir="auto"><p id="bec756f3-13fc-4a0e-9f02-f577b41dd1c5" class="">Here we use it to generate the first 10 numbers. The full code can be found <a href="https://github.com/savarin/pyscheme/blob/0f47292c8e5112425b50db19b744a50d8cabde4f/src/pyscheme.py">here</a>.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="68de4d1c-4216-4a16-9d36-e898f9fb215b" class="code code-wrap"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">&gt; evaluate((&quot;define&quot;, &quot;fibonacci&quot;, fibonacci))
+None
+
+&gt; [evaluate((&quot;fibonacci&quot;, i)) for i in range(10)]
+[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</code></pre></div><div style="display:contents" dir="auto"><p id="7a9e2c2c-85ee-43b8-b83c-76f3028f1036" class="">
+</p></div><div style="display:contents" dir="auto"><p id="a1b8332a-fd41-4b1b-b25e-7c2ded3aa5db" class="">It feels we haven’t done that much, but somehow end up with a pretty sophisticated system. We do this by only applying substitution.</p></div><div style="display:contents" dir="auto"><p id="05524553-db8c-4666-99b0-4415af109f20" class="">
+</p></div><div style="display:contents" dir="auto"><p id="79e1a63c-593a-45af-ae51-601eac5ce5be" class="">Let’s phrase this in SICP <a href="http://sarabander.github.io/sicp/html/1_002e1.xhtml#g_t1_002e1">terms</a>.</p></div><div style="display:contents" dir="auto"><blockquote id="15a0d77d-0a61-42ed-ac8a-a1318910d51b" class="">In programming, we deal with two kinds of elements: procedures and data. … Informally, data is “stuff” that we want to manipulate, and procedures are descriptions of the rules for manipulating the data.</blockquote></div><div style="display:contents" dir="auto"><p id="80bc9a10-508a-4e91-9e3b-f4da45c0f0ce" class="">
+</p></div><div style="display:contents" dir="auto"><p id="cdee0760-b38b-4f1d-896b-825bcbd68905" class="">Hence the idea of substitution serves as an introductory mental model of how a procedure works. In fact, the first two chapters can be described entirely via substitution (about one-third of a ~600-page book).</p></div><div style="display:contents" dir="auto"><p id="bfa18373-67c3-4103-8816-6a411b60f365" class="">
+</p></div><div style="display:contents" dir="auto"><p id="0286297a-ce79-4481-ad5d-fae1a2792ecb" class="">SICP does emphasize how interpreters do not typically operate by means of substitution. However, this model provides a useful starting point <a href="https://www.notion.so/1-week-with-David-Beazley-and-SICP-4c440389cf1e43f48fe67c969967f655?pvs=21">[5]</a>.</p></div><div style="display:contents" dir="auto"><h1 id="ef5e7fba-0f12-436f-83a7-63cc03e5cbc0" class="">State</h1></div><div style="display:contents" dir="auto"><p id="8762a64d-2202-4576-ab6d-8184e4e9ef63" class="">In this section, we explore where the substitution model breaks down.</p></div><div style="display:contents" dir="auto"><p id="70501a16-fbb6-405b-a84d-b041db6fec32" class="">
+</p></div><div style="display:contents" dir="auto"><p id="7efa518e-58b6-4ae9-b845-11ce91c70221" class="">The following shorthand notation can be used to define procedures in Scheme; note how the <code>lambda</code> is omitted. This will be our notation going forward.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a25661fb-ceb7-436e-b0b4-5f8d4f6ef017" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">(define (square x) (* x x))</code></pre></div><div style="display:contents" dir="auto"><p id="c6c342fc-10ce-4f9a-86d2-18356ef4c4c8" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="48041e8b-3569-4091-bb3c-8599d48c01f7" class="">Assignment</h3></div><div style="display:contents" dir="auto"><p id="806bbf9e-e570-410a-8fda-5b73daf0141d" class="">Suppose we’re modeling a bank account with a balance that changes. Scheme has the special form <code>set!</code> to change the value of an existing variable. We use it in the procedure <code>withdraw</code> that reduces the balance by the value <code>amount</code> and returns the updated balance.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="280d9a8c-200b-4ef3-b10f-9cebe4d0c47f" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">(define balance 100)
+
+(define (withdraw amount)
+  (set! balance (- balance amount))
+  balance)</code></pre></div><div style="display:contents" dir="auto"><p id="d49e3a42-8b9a-4873-8aa7-9345634dd393" class="">
+</p></div><div style="display:contents" dir="auto"><p id="91440197-7e10-4fe4-9d85-d271d15eb9a2" class="">When we make withdrawals, the balance changes as expected. The <code>&gt;</code> in this from this point onwards represents the Scheme REPL.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f12c8d54-72cd-4d38-8424-c9322e8c1d29" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; balance
+100
+
+&gt; (withdraw 20)
+80</code></pre></div><div style="display:contents" dir="auto"><p id="88a27966-4f5f-4089-8d59-1eda479efcad" class="">
+</p></div><div style="display:contents" dir="auto"><p id="bede06aa-2f42-40ee-9d22-9fade3b0e027" class="">However if we simply apply the substitution model and replace <code>balance</code> with the value <code>100</code>, <code>withdraw</code> will always return the initial balance.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="58886b39-491e-4e16-86ca-25e5a7f9ee64" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">(define (withdraw amount)
+  (set! 100 (- 100 amount))
+  100)</code></pre></div><div style="display:contents" dir="auto"><p id="e66eddf7-fb1f-41ff-80fa-e8e80b6e7322" class="">
+</p></div><div style="display:contents" dir="auto"><p id="685dd99e-d027-479f-b48b-52924c262f0f" class="">In other words, assignment breaks down the substitution model. The substitution model cannot distinguish between the balance before the <code>set!</code> and the balance after the <code>set!</code>.</p></div><div style="display:contents" dir="auto"><p id="a9189c72-7ae4-4638-9408-4e491ac93831" class="">
+</p></div><div style="display:contents" dir="auto"><p id="d8d3dd8e-ff9f-48a4-8d34-cea46553731c" class="">To accommodate assignment, we can no longer have <code>define</code> serving as an alias. We need to introduce an environment where variables are defined, with corresponding get and set operators. Each procedure now has an attached environment in which they were defined. Every application of the procedure creates a new environment that holds procedure arguments.</p></div><div style="display:contents" dir="auto"><p id="573823b3-e725-4263-bb2c-813dbd02b4a5" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1f276544-b535-42d5-8830-4009bbf4b785" class="">The environment determines the context in which an expression should be evaluated, but it can be challenging to understand how multiple environments relate to each other. I distinctly recall Dave patiently walking us through different scenarios, sketching box-and-arrow diagrams along the way. Having this exposition before a closer review of the section in the book is priceless.</p></div><div style="display:contents" dir="auto"><p id="a83cca87-143f-472a-ba6a-a51121737a22" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="dee36e65-8dc0-4755-b950-2f378f045065" class="">Streams</h3></div><div style="display:contents" dir="auto"><p id="27770e4c-5320-4463-89f9-1aed8c734a7a" class="">Let’s briefly review another model. Instead of a single change to the balance, suppose we have the sequence <code>amounts</code> that represents additions to or subtractions from the balance. Consider the following procedure, which gives us the whole balance history <a href="https://www.notion.so/1-week-with-David-Beazley-and-SICP-4c440389cf1e43f48fe67c969967f655?pvs=21">[6]</a>.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="22c36d2c-fdbf-4007-81b0-eb0618f3a01e" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">(define (withdraw balance amount)
+  (cons
+    balance
+    (withdraw (- balance (car amounts)) (cdr amounts))))</code></pre></div><div style="display:contents" dir="auto"><p id="faa190f5-4f2a-4f66-bff4-657dbd9f1680" class="">
+</p></div><div style="display:contents" dir="auto"><p id="3b48201c-0ecc-495a-b7ed-08ff2b93716a" class="">Let’s take this a step further. What if there are terms in <code>amounts</code> that do not yet exist, either because the event has not yet occurred or because generating the next term requires a forced evaluation? This notion of delayed evaluation (analogous to a generator in Python), turns the sequence into what’s called a stream.</p></div><div style="display:contents" dir="auto"><p id="fbe9916d-4323-4c70-8052-33704df3e3ae" class="">
+</p></div><div style="display:contents" dir="auto"><p id="3d164624-5f83-40c5-a6e1-919d06ed693b" class="">When stream processing was described as a way to “model systems that have state without ever using assignment or mutable data”, all the pieces came together <a href="https://www.notion.so/1-week-with-David-Beazley-and-SICP-4c440389cf1e43f48fe67c969967f655?pvs=21">[7]</a>.</p></div><div style="display:contents" dir="auto"><p id="3875e650-59a4-45b2-8e68-117b2d08b3ed" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="f5cef2c7-fdba-4751-b159-5bc42a9d4677" class="">Trade-offs</h3></div><div style="display:contents" dir="auto"><p id="2b6d5994-3c94-41f5-8a54-46c05d49dd90" class="">At the start of Chapter 3, SICP emphasizes how important it is to base the structure of our program on the structure of the system being modeled. As such, modeling a real-world bank account balance seems most natural with mutable variables.</p></div><div style="display:contents" dir="auto"><p id="e8c32359-c8b3-43e8-9b8f-f39001e16663" class="">
+</p></div><div style="display:contents" dir="auto"><p id="714ffe02-5ef5-46b3-aa4b-010e482e114a" class="">The imperative or mutable model of programming is based on the idea of using assignments and mutable data structures to represent and manipulate state. We introduced environments to be able to handle mutable data. This is in contrast to the functional or immutable model, where pure functions are used to manipulate data without changing the state of the system <a href="https://www.notion.so/1-week-with-David-Beazley-and-SICP-4c440389cf1e43f48fe67c969967f655?pvs=21">[8]</a>.</p></div><div style="display:contents" dir="auto"><p id="a494aa4f-0dc8-468d-8f0a-e3262f413e2f" class="">
+</p></div><div style="display:contents" dir="auto"><p id="8857bb5d-89e0-430a-a2da-cdfeb423f492" class="">It is worth noting that the imperative model introduces side effects. This means that the order of operations now matter, as we need to ensure every statement is using the correct version of each variable <a href="https://www.notion.so/1-week-with-David-Beazley-and-SICP-4c440389cf1e43f48fe67c969967f655?pvs=21">[9]</a>. Managing this complexity gets worse when we have concurrency <a href="https://www.notion.so/1-week-with-David-Beazley-and-SICP-4c440389cf1e43f48fe67c969967f655?pvs=21">[10]</a>.</p></div><div style="display:contents" dir="auto"><p id="0b72a845-2fb2-4cb1-a062-7778e4f4f85b" class="">
+</p></div><div style="display:contents" dir="auto"><p id="bf2845e5-d446-4783-92cd-3aec55fe1092" class="">The other tricky issue has to do with the concept of equality. Are two objects equal when they have the same value? Are they equal if if they have the same memory address? Do we need multiple equality operators? Different languages handle this differently, making different trade-offs along the way.</p></div><div style="display:contents" dir="auto"><p id="570d997f-e744-4284-b22d-6c2bfc183798" class="">
+</p></div><div style="display:contents" dir="auto"><p id="88de9dc8-adfa-47e5-9bad-593364b46d87" class="">The end of Chapter 3 says this best.</p></div><div style="display:contents" dir="auto"><blockquote id="76bc7177-1c7b-402d-802b-2b6b1d8fc800" class="">We can model the world as a collection of separate, time-bound interacting objects with state, or we can model the worlds as a single, timeless, stateless unity. Each view has powerful advantages, but neither alone is completely satisfactory. A grand unification has yet to emerge.</blockquote></div><div style="display:contents" dir="auto"><h1 id="0dcea40b-b321-40c3-985c-73b01db06f07" class="">Mind blown</h1></div><div style="display:contents" dir="auto"><p id="16d94e26-21ae-4a7e-9b12-8f44528b6f2a" class="">Now for the fun parts…</p></div><div style="display:contents" dir="auto"><h3 id="8859f92a-9e53-498f-abd0-225c6ea03851" class="">Lambda calculus</h3></div><div style="display:contents" dir="auto"><p id="f5d022f1-a261-44a2-b8b8-b0e2775655ff" class="">Consider the following procedures that take in other procedures as arguments <a href="https://www.notion.so/1-week-with-David-Beazley-and-SICP-4c440389cf1e43f48fe67c969967f655?pvs=21">[11]</a>. In particular, <code>zero</code> maps any procedure to the identity procedure.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c8aadc8f-f483-41a1-8c7b-7d9377079d39" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">(define (identity x) x)
+
+(define (zero f) identity)
+
+(define (increment n)
+  (lambda (f)
+    (lambda (x) (f ((n f) x)))))</code></pre></div><div style="display:contents" dir="auto"><p id="8aebe44b-abce-4079-9a2e-8e36ee0d03f2" class="">
+</p></div><div style="display:contents" dir="auto"><p id="889d6eb2-5f6b-4182-95d9-dd16f3ee80e8" class="">We apply <code>zero</code> and <code>(increment zero)</code> to a procedure that adds <code>1</code>.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="87f7dc9d-05ac-47e9-8d44-21c2a025734f" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; ((zero (lambda (x) (+ x 1))) 0)
+0
+
+&gt; (((increment zero) (lambda (x) (+ x 1))) 0)
+1</code></pre></div><div style="display:contents" dir="auto"><p id="26cda986-f382-46dd-a04c-de2699a41ada" class="">
+</p></div><div style="display:contents" dir="auto"><p id="351342bc-0058-4b1d-936d-0208713d1ea1" class="">Essentially what we have are integers represented as procedures. That’s right. Numbers as procedures. Take a moment to let that sink in…</p></div><div style="display:contents" dir="auto"><p id="79740b54-09a4-4597-9bf2-314ccaaff68e" class="">
+</p></div><div style="display:contents" dir="auto"><p id="e1b31389-aa23-478e-becf-635416a6145e" class="">This representation is known as <a href="https://en.wikipedia.org/wiki/Church_encoding#Church_numerals">Church numerals</a>, after <a href="https://en.wikipedia.org/wiki/Alonzo_Church">Alonzo Church</a>.</p></div><div style="display:contents" dir="auto"><p id="c90a5afc-24e7-4014-9b42-7ded8cedb6f0" class="">
+</p></div><div style="display:contents" dir="auto"><p id="6b7a5423-d85b-4bc9-ba6e-b68a4d6b96c2" class="">We define <code>one</code> as a procedure that takes a procedure argument and applies it once. We can also arrive at this result by expanding out <code>(increment zero)</code>. Recall that <code>zero</code> maps a procedure <code>f</code> to <code>identity</code>, and <code>identity</code> maps <code>x</code> to itself.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="438777e3-4335-47d4-8f4b-417292842112" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">(define (one f)
+  (lambda (x) (f x)))
+
+; (increment zero)
+; (lambda (f) (lambda (x) (f ((zero f) x))))
+; (lambda (f) (lambda (x) (f (identity x))))
+; (lambda (f) (lambda (x) (f x)))</code></pre></div><div style="display:contents" dir="auto"><p id="b3bb8a13-5427-4b54-abb9-620c79601e8c" class="">
+</p></div><div style="display:contents" dir="auto"><p id="638ac92b-1f8b-4abf-ba7f-55724232185e" class="">Now the encore. If <code>one</code> applies a procedure argument once, we expect <code>two</code> to apply it twice. Expanding out <code>(increment one)</code> confirms this is indeed the case.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b00b316e-7442-4da6-a8ad-7ac22aa7ede0" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">(define (two f)
+  (lambda (x) (f (f x))))
+
+; (increment one)
+; (lambda (f) (lambda (x) (f ((one f) x))))
+; (lambda (f) (lambda (x) (f (f x))))</code></pre></div><div style="display:contents" dir="auto"><p id="84b36e60-77c0-42bd-8135-7d5a0755e8b1" class="">
+</p></div><div style="display:contents" dir="auto"><p id="c4042f4b-6642-405b-b1da-05b44db3deec" class="">We apply <code>one</code> and <code>two</code> to the same procedure above. It’s magic.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4bbc0031-534f-4c9c-b99d-a40ace29d49e" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; ((one (lambda (x) (+ x 1))) 0)
+1
+
+&gt; ((two (lambda (x) (+ x 1))) 0)
+2</code></pre></div><div style="display:contents" dir="auto"><p id="d2ee33f0-770e-4fe0-a358-87a026df6ece" class="">
+</p></div><div style="display:contents" dir="auto"><p id="5cedab03-65ab-4f0b-844e-e7d08f7432be" class="">In our Scheme interpreter <a href="https://www.notion.so/1-week-with-David-Beazley-and-SICP-4c440389cf1e43f48fe67c969967f655?pvs=21">above</a>, we handled the special forms <code>define</code>, <code>if</code> and <code>lambda</code>. We need <code>lambda</code> to create procedures, so that’s a keeper. We can sort of do without <code>define</code>. That leaves us with <code>if</code>, or does it?</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1cbb5805-bb8f-477c-8fd5-ddbd55361b26" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">(define (true x)
+  (lambda (y) x))
+
+(define (false x)
+  (lambda (y) y))
+
+(define (if f)
+  (lambda (a)
+    (lambda (b) ((f a) b))))</code></pre></div><div style="display:contents" dir="auto"><p id="1ea22105-207f-4b44-b6e4-386bac7fabbd" class="">
+</p></div><div style="display:contents" dir="auto"><p id="24201bb2-9a2b-48c9-a9ea-e868efc10b22" class="">Yes, it does work. The interpreter needs a <a href="https://github.com/savarin/pyscheme/blob/8a662d4553f655cb614b6debdc9349ecf2553c2a/src/pyscheme.py#L14">tweak</a>; tests <a href="https://github.com/savarin/pyscheme/blob/8a662d4553f655cb614b6debdc9349ecf2553c2a/src/test_pyscheme.py#L47-L163">here</a> will now pass.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="73991661-fd6e-4741-ba18-0421779d473d" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; (((if true) 2) 3)
+2
+
+&gt; (((if false) 2) 3)
+3</code></pre></div><div style="display:contents" dir="auto"><p id="aba04fd6-9de8-4eea-aa4d-5c1c3bee90f5" class="">
+</p></div><div style="display:contents" dir="auto"><p id="72aab7ca-bc51-4586-b937-648b5c6cfe1a" class="">Chapter 2 is dedicated to manipulating complex forms with <code>cons</code>, <code>car</code> and <code>cdr</code>. In particular, compound data structures such as lists and dictionaries can be built on top of pairs.</p></div><div style="display:contents" dir="auto"><p id="b42ecbaa-ac2b-46a7-a84d-53eb2b96b7d6" class="">
+</p></div><div style="display:contents" dir="auto"><p id="03be334c-44a6-4262-b105-88cb5ebb0278" class="">It turns out you can also represent these with procedures.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1df74293-5a40-44ea-8e1a-e97ab20fa3ce" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">(define (cons x y)
+  (lambda (m) (m x y)))
+
+(define (car z)
+  (z (lambda (p q) p)))
+
+(define (cdr z)
+  (z (lambda (p q) q)))</code></pre></div><div style="display:contents" dir="auto"><p id="624259be-f377-4e2e-95c6-86aff699e49b" class="">
+</p></div><div style="display:contents" dir="auto"><p id="aa2deb83-165d-4126-84bc-b7a5d47e4315" class="">Here we go.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fbbe1ba8-b77f-42c3-9530-bedc1a34807a" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; (car (cons 1 2))
+1
+
+&gt; (cdr (cons 1 2))
+2</code></pre></div><div style="display:contents" dir="auto"><p id="f7fb98e1-c6b5-4e1d-8a8a-99260ac2ab00" class="">
+</p></div><div style="display:contents" dir="auto"><p id="0e1178db-d1d7-42bc-9276-ec7c4bffd1a9" class="">Let’s circle back to the idea that the building blocks of programming are data and procedures. Based on our excursion here, we can say the following.</p></div><div style="display:contents" dir="auto"><p id="0ecffd80-da8c-4034-9bc9-3325ebda3fc1" class="">
+</p></div><div style="display:contents" dir="ltr"><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="40058842-b584-4114-a774-6bfdd55f59c5"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">All you need is procedures.</div></figure></div><div style="display:contents" dir="auto"><p id="0154b7c8-af3a-4f84-aefc-2d6b2697bbab" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1725dcc8-127c-4a1c-932b-537c3ac55baa" class="">Theoretically we can now write Fibonacci using only procedures. Perhaps for another time…</p></div><div style="display:contents" dir="auto"><p id="164583a8-b837-40cb-a306-fda4faeead35" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="6581d3a5-1732-4e3a-bcf1-004af115976b" class="">Applicative vs normal order</h3></div><div style="display:contents" dir="auto"><p id="1d250466-f81e-4b0c-9f2f-d51cc5c52807" class="">There are lots of subtle-yet-powerful ideas in SICP. As per Dave.</p></div><div style="display:contents" dir="auto"><blockquote id="ce8ea9d8-6945-4654-b516-cbcc6aeaf3cc" class="">Major parts of the book are devoted to setting up competing approaches to computation. Consequences and tradeoffs of these decisions are then explored. Often, the differences are subtle, but insightful.</blockquote></div><div style="display:contents" dir="auto"><p id="ae04e6d0-095b-4e8f-9667-38296f5920a7" class="">
+</p></div><div style="display:contents" dir="auto"><p id="3c814ebe-59a9-4009-bf11-e7ef303626e4" class="">Scheme uses applicative-order evaluation to evaluate procedures, which means arguments are fully evaluated before the procedure is applied. This strategy is often referred to as eager evaluation or call-by-value. In this example, <code>(+ 1 2)</code> is evaluated first.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d9828816-e4f5-4db3-86da-4410b36e9054" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; (square (+ 1 2))
+; (square 3)
+; (* 3 3)
+9</code></pre></div><div style="display:contents" dir="auto"><p id="27d5aa91-a1a4-42eb-91f7-f8796a3207d9" class="">
+</p></div><div style="display:contents" dir="auto"><p id="201f717b-1bd0-4740-9b7b-6ba8d171dfdb" class="">This is how most programming languages work, and is how we constructed our <a href="https://www.notion.so/1-week-with-David-Beazley-and-SICP-4c440389cf1e43f48fe67c969967f655?pvs=21">interpreter</a>. </p></div><div style="display:contents" dir="auto"><p id="02e3892c-ae24-4404-b93b-c01635eeaa51" class="">
+</p></div><div style="display:contents" dir="auto"><p id="523f5df9-d2f2-49fd-8d57-1a7eb91cc54e" class="">In contrast, normal-order evaluation is when the evaluation of arguments is deferred to when they are actually needed. This is often referred to as lazy evaluation or call-by-need.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="384bc908-f1cf-4044-b79f-7928a8f553b2" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; (square (+ 1 2))
+; (* (+ 1 2) (+ 1 2))
+; (* 3 (+ 1 2))
+; (* 3 3)
+9</code></pre></div><div style="display:contents" dir="auto"><p id="08532547-114e-4ec2-b7d7-1a80cba34401" class="">
+</p></div><div style="display:contents" dir="auto"><p id="af27aa04-667a-4a58-a698-f060fc9b72b7" class="">Applicative order is simpler to implement and understand. It can also be more efficient; in our example <code>(+ 1 2)</code> is evaluated once. That said there are cases where applicative order leads to unnecessary evaluations, while normal order would skip those steps. Normal order does have extra overhead; it requires tracking which parts have been evaluated and which have not.</p></div><div style="display:contents" dir="auto"><p id="a249873a-792a-454f-93cd-ad6faaeb8629" class="">
+</p></div><div style="display:contents" dir="auto"><p id="a11c49ea-7771-4691-a523-bb1f7d5b9738" class="">At first glance, it may appear that we get the same answer either way. Like lambda calculus, this is an insight-bomb hiding in an exercise.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="aae4d921-aaf6-488a-ba29-b1a020d83ac2" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; (define (p) (p))
+
+&gt; (define (test x y) (if (= x 0)) 0 y)
+
+&gt; (test 0 (p))
+; spins forever</code></pre></div><div style="display:contents" dir="auto"><p id="f9c7ab91-6ae2-4c57-ba52-045cff876ac5" class="">
+</p></div><div style="display:contents" dir="auto"><p id="44f044e7-0179-4ce1-aab0-58267d2e073e" class="">Running the last line, we go into an infinite loop using applicative order. In normal order, we simply return <code>0</code> <a href="https://www.notion.so/1-week-with-David-Beazley-and-SICP-4c440389cf1e43f48fe67c969967f655?pvs=21">[12]</a>.</p></div><div style="display:contents" dir="auto"><p id="f85f64ff-c38a-4ae1-96eb-66dd78f293e6" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="67ad5931-4f56-4354-af79-e5449b610791" class="">Recursion vs iteration</h3></div><div style="display:contents" dir="auto"><p id="00cfe1b7-65ae-4937-9940-f8082627c43c" class="">Scheme does not have for loops. Instead we do repeated operations through recursion, in which the procedure calls itself. The example here calculates factorials.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e0c07bb0-626f-48d7-9e24-2a3e349cfec4" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">(define (factorial n)
+  (if (= n 1) 
+    1 
+    (* n (factorial (- n 1)))))</code></pre></div><div style="display:contents" dir="auto"><p id="f4e47331-75f3-4ea0-bc44-324572a0df84" class="">
+</p></div><div style="display:contents" dir="auto"><p id="726846f4-7861-4ecf-9d47-848b271677d2" class="">A recursive process always leaves some part of the computation behind to be completed later. This results in a chain of pending operations that grows until we hit the base case, at which point the chain starts to collapse.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8b2d80a2-0cb6-4bbe-a91b-3a082cf73a1b" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; (factorial 6)
+; (* 6 (factorial 5))
+; (* 6 (* 5 (factorial 4)))
+; (* 6 (* 5 (* 4 (factorial 3)))
+; (* 6 (* 5 (* 4 (* 3 (factorial 2)))
+; (* 6 (* 5 (* 4 (* 3 (* 2 (factorial 1)))
+; (* 6 (* 5 (* 4 (* 3 (* 2 1))
+; (* 6 (* 5 (* 4 (* 3 2))
+; (* 6 (* 5 (* 4 6))
+; (* 6 (* 5 24)
+; (* 6 120)
+720</code></pre></div><div style="display:contents" dir="auto"><p id="14916f41-5b31-4f3c-9364-fe4ee41cb12b" class="">
+</p></div><div style="display:contents" dir="auto"><p id="e0ed1959-59e9-4c15-a560-204e7989151c" class="">To avoid this growth-and-collapse pattern, we can use what SICP calls iteration. The idea is we keep track of a counter and a result, which are ‘carried forward’ on each procedure call. The calculation returns the result when the stopping point is reached.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="13945e0f-f71f-45c0-9748-159d66dd63eb" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">(define (factorial n)
+  (define (fact-iter product counter max-count)
+    (if (&gt; counter max-count)
+      product
+      (fact-iter (* counter product) (+ counter 1) max-count)))
+  
+  (fact-iter 1 1 n))</code></pre></div><div style="display:contents" dir="auto"><p id="2bc56010-609b-4165-aa18-ae5437ab9092" class="">
+</p></div><div style="display:contents" dir="auto"><p id="973b15ef-a041-4277-9161-a89b4141c9a7" class="">The subprocedure (or closure) <code>fact-iter</code> is called by <code>factorial</code>, and returns when <code>counter</code> is larger than <code>6</code>.</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a4833f14-ba4c-4566-9163-5be0504ef238" class="code code-wrap"><code class="language-Scheme" style="white-space:pre-wrap;word-break:break-all">&gt; (factorial 6)
+; (fact-iter   1 1 6)
+; (fact-iter   1 2 6)
+; (fact-iter   2 3 6)
+; (fact-iter   6 4 6)
+; (fact-iter  24 5 6)
+; (fact-iter 120 6 6)
+; (fact-iter 720 7 6)
+720</code></pre></div><div style="display:contents" dir="auto"><p id="f0417bc9-5d09-432e-92c1-8ca05202b6ad" class="">
+</p></div><div style="display:contents" dir="auto"><p id="c9385e6d-660c-47e9-97f4-7ccf10917be4" class="">As an aside, it’s interesting to note that these approaches can be related to problem-solving techniques. Recursion is ‘breaking down large problems into smaller ones’, iteration is ‘start small and gradually build up to a result’.</p></div><div style="display:contents" dir="auto"><p id="0f564102-7e6e-446f-8986-471534033b4c" class="">
+</p></div><div style="display:contents" dir="auto"><p id="cea32d64-4bea-46b8-a484-e69ffaaa9f89" class="">From a space perspective, recursion is as efficient as for loops. In the context of stack frames, however, repeated function calls would use up increasing amounts of memory. To get around this, Scheme takes advantage of a technique called tail-call optimization. This eliminates the memory overhead by implementing what is practically a for loop under-the-hood.</p></div><div style="display:contents" dir="auto"><p id="98224fd0-6a3d-4f84-bc49-381903c833c3" class="">
+</p></div><div style="display:contents" dir="auto"><p id="eac6c7cd-0c42-45c5-bcf1-76d0089809ef" class="">Peter Norvig even implements tail call optimization into his interpreter <a href="https://norvig.com/lispy2.html">here</a>.</p></div><div style="display:contents" dir="auto"><h1 id="58ee6b04-35b2-4e26-bd62-4b33ffed94df" class="">Postscript</h1></div><div style="display:contents" dir="auto"><p id="7f7411cb-df39-40c0-a79a-f223f81f0bc9" class="">OK so Dave cherry-picked topics for a week-long course; I cherry-picked from those topics for a blog post. What did I leave out? A fair bit. Metacircular evaluator. Repeated procedure application to calculate square roots. Discussions on classes, functional programming, macros, types, symbolic manipulation…</p></div><div style="display:contents" dir="auto"><p id="e476339d-bdbc-4e64-979d-4bf30e891626" class="">
+</p></div><div style="display:contents" dir="auto"><p id="aa9334d3-64b5-4772-a9d4-aa49845c8eba" class="">It’s unclear when I’ll get to writing a follow-up post; I’m already on to Dave’s other <a href="https://www.dabeaz.com/winter.html">courses</a>. That’s right, I’m all-in. In the meantime, Chelsea Troy has a more comprehensive write-up <a href="https://chelseatroy.com/tag/sicp">here</a>.</p></div><div style="display:contents" dir="auto"><p id="fbff6f23-4160-4dd0-8327-d38cd4eba1f3" class="">
+</p></div><div style="display:contents" dir="auto"><p id="cdc702d3-4031-4ed4-b08b-999bf5c79de5" class="">Is the material too theoretical for software engineers? Maybe. I will, however, leave you with this quote by Donald Knuth.</p></div><div style="display:contents" dir="auto"><blockquote id="0b8cd151-7ddd-4a99-a11c-b3a2eefb055c" class="">If you find that you’re spending almost all your time on theory, start turning some attention to practical things; it will improve your theories. If you find that you’re spending almost all your time on practice, start turning some attention to theoretical things; it will improve your practice.</blockquote></div><div style="display:contents" dir="auto"><p id="6209b014-b835-4fd2-8a7a-871ec7b991b9" class="">
+</p></div><div style="display:contents" dir="auto"><p id="bfb0dacf-9ef1-4c16-8f1a-448e523f5f97" class="">
+</p></div><div style="display:contents" dir="auto"><p id="77c2f7d0-5211-4933-b9ee-554f098edb51" class="">
+</p></div><div style="display:contents" dir="auto"><p id="c345d4cf-4817-4e92-9902-6eb37a16deb9" class="">[1] The SICP book can be found <a href="http://sarabander.github.io/sicp/html/index.xhtml">here</a>, recorded lectures <a href="https://www.youtube.com/playlist?list=PLE18841CABEA24090">here</a>.</p></div><div style="display:contents" dir="auto"><p id="5346ed66-a6e1-4094-9db6-84c68d1e08a5" class="">
+</p></div><div style="display:contents" dir="auto"><p id="25317781-7591-4656-a424-7b70abc40de1" class="">[2] Differences include static vs dynamic types, compiled vs interpreted, with vs without garbage collection. The <a href="https://bradfieldcs.com/courses/languages">course</a> I did started off with this wonderful quote by Ras Bodik.</p></div><div style="display:contents" dir="auto"><blockquote id="e988afc9-83f2-41d1-b9ec-629174f44225" class="">Take historical note of textile and steel industries: do you want to build machines and tools, or do you want to operate those machines?</blockquote></div><div style="display:contents" dir="auto"><p id="435706c5-be26-485b-b759-66bc4a7bc303" class="">
+</p></div><div style="display:contents" dir="auto"><p id="582cdfbf-70e2-476b-b735-6cda1bed81f1" class="">[3] The name Racket is a playful reference to Scheme, in the sense that the word ‘scheme’ means a plan that is often dishonest or illegal.</p></div><div style="display:contents" dir="auto"><p id="3ae9574b-a712-4f41-a986-f47b5d15d66e" class="">
+</p></div><div style="display:contents" dir="auto"><p id="7229a6f2-d4aa-4f00-a22b-6e01a883ba71" class="">[4] Clojure uses <code>first</code> and <code>rest</code> as more intuitively-named versions of <code>car</code> and <code>cdr</code>.</p></div><div style="display:contents" dir="auto"><p id="170e8dea-a237-4ee4-a906-1054c3223e8c" class="">
+</p></div><div style="display:contents" dir="auto"><p id="8bcbfbd8-2b4b-4494-8333-176eda9deb8d" class="">[5] This is described in SICP <a href="http://sarabander.github.io/sicp/html/1_002e1.xhtml#g_t1_002e1_002e5">here</a>.</p></div><div style="display:contents" dir="auto"><blockquote id="883213b9-f09e-4761-85b0-f327bcb712f8" class="">The purpose of substitution is to help us think about procedure application, not to provide a description of how the interpreter really works. Typical interpreters do not evaluate procedure applications by manipulating the text of a procedure to substitute values for the formal parameters. … The substitution model is only the first of these models — a way to get started thinking formally about the evaluation process.</blockquote></div><div style="display:contents" dir="auto"><p id="c9f9ef15-e2f4-4f39-a03d-2543d8c8d9c5" class="">
+</p></div><div style="display:contents" dir="auto"><p id="f223858b-5605-47af-be09-90877d89b568" class="">[6] For convenience, we did not distinguish between the non-stream and stream versions of <code>car</code> and <code>cdr</code>.</p></div><div style="display:contents" dir="auto"><p id="5250b2d4-616a-41a7-874b-d16ccbab8a85" class="">
+</p></div><div style="display:contents" dir="auto"><p id="299c4056-da62-4f6b-ac94-6d3ed0a7969b" class="">[7] This phrasing came out of a different SICP session, details <a href="https://chelseatroy.com/2019/11/27/sicp-5-modularity-objects-and-state">here</a>.</p></div><div style="display:contents" dir="auto"><p id="c0c0c31f-359c-442f-9862-074f86b97e3a" class="">
+</p></div><div style="display:contents" dir="auto"><p id="c7bcd2d3-9bcb-4df8-9cb3-4436d244532b" class="">[8] Bob Nystrom has an amusing <a href="https://craftinginterpreters.com/statements-and-state.html#assignment">paragraph</a> in Crafting Interpreters on the opposing camps.</p></div><div style="display:contents" dir="auto"><blockquote id="3cd8eafe-9693-4729-a625-a932cc823a1e" class="">Mutating a variable is a side effect and, as the name suggests, some language folks think side effects are dirty or inelegant. Code should be pure math that produces values —crystalline, unchanging ones — like an act of divine creation. Not some grubby automaton that beats blobs of data into shape, one imperative grunt at a time.</blockquote></div><div style="display:contents" dir="auto"><p id="3cb7bad3-5b51-488d-bc1b-55745df9ea4d" class="">
+</p></div><div style="display:contents" dir="auto"><p id="38d1dfe7-6bf6-4e88-8f56-6c8a31d46c7e" class="">[9] <a href="http://sarabander.github.io/sicp/html/3_002e1.xhtml#Exercise-3_002e8">Exercise 3.8</a> involves coming up with a procedure <code>f</code> such that evaluating <code>(+ (f 0) (f 1))</code> returns <code>0</code> but <code>(+ (f 1) (f 0))</code> returns <code>1</code>.</p></div><div style="display:contents" dir="auto"><p id="0d5548e4-78da-4003-89a5-eb1707a21be1" class="">
+</p></div><div style="display:contents" dir="auto"><p id="046123bb-c3d7-48a8-af55-f5792849cb73" class="">[10] Bartosz Milewski calls for a return to functional programming in the multicore world, in the preface of his book <a href="https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface">here</a>.</p></div><div style="display:contents" dir="auto"><p id="249e8c05-9e65-4150-b91f-0f2460160330" class="">
+</p></div><div style="display:contents" dir="auto"><p id="23f656a5-4ea9-406c-b742-c6bb1927bfb6" class="">[11] This subsection is actually set up as <a href="http://sarabander.github.io/sicp/html/2_002e1.xhtml#Exercise-2_002e6">Exercise 2.6</a> in the book.</p></div><div style="display:contents" dir="auto"><p id="855ab54e-4aff-4e24-a6fe-f43bf7fd3ee6" class="">
+</p></div><div style="display:contents" dir="auto"><p id="f4fe35e5-8f8d-42cc-a3d9-7012ab370156" class="">[12] Another way to think about special forms is as procedures where ‘normal rules do not apply’. In the case of <code>if</code>, the <code>else</code> clause can lead to an infinite loop if evaluated but is short-circuited to the <code>then</code> clause when the <code>predicate</code> is true.</p></div><div style="display:contents" dir="auto"><p id="c75196d2-aa13-458b-a843-161e5e147a76" class="">
+</p></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
