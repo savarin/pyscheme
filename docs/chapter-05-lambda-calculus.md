@@ -504,15 +504,15 @@ These aren't simulations or tricks. Church proved that lambda calculus is **Turi
 The building blocks of computation aren't numbers and booleans. They're **functions**.
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                                                                 │
-│                    💡 THE INSIGHT 💡                            │
-│                                                                 │
-│         Data and procedures are not fundamentally               │
-│         different. Data can be encoded as procedures.           │
-│         All you need is lambda.                                 │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────┐
+│                                                           │
+│                   THE INSIGHT                             │
+│                                                           │
+│       Data and procedures are not fundamentally           │
+│       different. Data can be encoded as procedures.       │
+│       All you need is lambda.                             │
+│                                                           │
+└───────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -632,19 +632,19 @@ In 1936, Church and Turing independently proved that their models were equivalen
 This equivalence is profound. It suggests that "computability" is a fundamental concept, not an artifact of a particular model.
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                                                                 │
-│   1936: Church-Turing Thesis                                    │
-│                                                                 │
-│   ┌─────────────┐         equivalent         ┌─────────────┐   │
-│   │   Lambda    │◄─────────────────────────►│   Turing    │   │
-│   │  Calculus   │                            │   Machine   │   │
-│   └─────────────┘                            └─────────────┘   │
-│                                                                 │
-│   Both define the same set of computable functions.             │
-│   "Computability" is a natural, universal concept.              │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────┐
+│                                                        │
+│  1936: Church-Turing Thesis                            │
+│                                                        │
+│  ┌─────────────┐    equivalent    ┌─────────────┐      │
+│  │   Lambda    │◄────────────────►│   Turing    │      │
+│  │  Calculus   │                  │   Machine   │      │
+│  └─────────────┘                  └─────────────┘      │
+│                                                        │
+│  Both define the same set of computable functions.     │
+│  "Computability" is a natural, universal concept.      │
+│                                                        │
+└────────────────────────────────────────────────────────┘
 ```
 
 Lambda calculus became the foundation of functional programming. Lisp (1958) was directly inspired by it. Scheme, ML, Haskell, and every modern functional language carries its DNA.

@@ -239,18 +239,18 @@ Fifteen lines. This is the skeleton upon which all interpreters are built.
 The pattern is universal:
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                    evaluate(expr)                    │
-├─────────────────────────────────────────────────────┤
-│                                                      │
-│   Is expr an atom?                                   │
-│   ├── Number  →  return it                          │
-│   └── Symbol  →  look it up                         │
-│                                                      │
-│   Is expr compound?                                  │
-│   └── Tuple   →  evaluate parts, combine results    │
-│                                                      │
-└─────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────┐
+│                 evaluate(expr)                   │
+├──────────────────────────────────────────────────┤
+│                                                  │
+│  Is expr an atom?                                │
+│  ├── Number  →  return it                        │
+│  └── Symbol  →  look it up                       │
+│                                                  │
+│  Is expr compound?                               │
+│  └── Tuple   →  evaluate parts, combine results  │
+│                                                  │
+└──────────────────────────────────────────────────┘
 ```
 
 This is what we mean by "the evaluator's heart." Every language feature we add—variables, conditionals, functions—will slot into this structure. The heart keeps beating; we just teach it new rhythms.
@@ -474,15 +474,15 @@ We started with a question: what does it mean to run a program? The answer is a 
 3. **Everything else** evaluates parts, then combines them
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                     EXPRESSION                       │
-├──────────────┬──────────────┬───────────────────────┤
-│    Atom      │ Special Form │   Procedure Call      │
-├──────────────┼──────────────┼───────────────────────┤
-│ Number → self│ define → bind│ 1. Evaluate operator  │
-│ Symbol → look│ if → branch  │ 2. Evaluate arguments │
-│          up  │ lambda → ??? │ 3. Apply              │
-└──────────────┴──────────────┴───────────────────────┘
+┌────────────────────────────────────────────────────┐
+│                    EXPRESSION                      │
+├───────────────┬───────────────┬────────────────────┤
+│     Atom      │  Special Form │  Procedure Call    │
+├───────────────┼───────────────┼────────────────────┤
+│ Number → self │ define → bind │ 1. Eval operator   │
+│ Symbol → look │ if → branch   │ 2. Eval arguments  │
+│           up  │ lambda → ???  │ 3. Apply           │
+└───────────────┴───────────────┴────────────────────┘
 ```
 
 The `lambda` box is empty. That's our next destination.

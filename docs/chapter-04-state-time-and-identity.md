@@ -1,4 +1,4 @@
-# Chapter 4: State, Time & Identity
+# Chapter 4: State, Time + Identity
 
 > *"We can model the world as a collection of separate, time-bound, interacting objects with state, or we can model the world as a single, timeless, stateless unity. Each view has powerful advantages, but neither alone is completely satisfactory. A grand unification has yet to emerge."*
 > — Structure and Interpretation of Computer Programs
@@ -90,21 +90,20 @@ This is nonsense. `(set! 100 ...)` tries to assign to a number, not a variable. 
 The problem is fundamental: **substitution erases the identity of the variable**. Once we replace `balance` with `100`, we lose the ability to change what `balance` refers to. The name is gone; only the value remains.
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│  SUBSTITUTION MODEL                                             │
-│                                                                 │
-│  (withdraw 20)                                                  │
-│       │                                                         │
-│       ▼                                                         │
-│  Replace 'balance' with 100                                     │
-│       │                                                         │
-│       ▼                                                         │
-│  (set! 100 (- 100 20))   ← Makes no sense!                     │
-│         100                                                     │
-│                                                                 │
-│  The name 'balance' has been destroyed.                        │
-│  We can no longer change what it refers to.                    │
-└─────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────┐
+│  SUBSTITUTION MODEL                                           │
+│                                                               │
+│  (withdraw 20)                                                │
+│       │                                                       │
+│       ▼                                                       │
+│  Replace 'balance' with 100                                   │
+│       │                                                       │
+│       ▼                                                       │
+│  (set! 100 (- 100 20))   ← Makes no sense!                    │
+│                                                               │
+│  The name 'balance' has been destroyed.                       │
+│  We can no longer change what it refers to.                   │
+└───────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -114,29 +113,29 @@ The problem is fundamental: **substitution erases the identity of the variable**
 The environment model solves this. Instead of replacing names with values, we store bindings in a data structure and look them up at runtime.
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│  ENVIRONMENT MODEL                                              │
-│                                                                 │
-│  Global Environment:                                            │
-│  ┌──────────────────────┐                                      │
-│  │ "balance" ──────────────► 100                               │
-│  │ "withdraw" ─────────────► <procedure>                       │
-│  └──────────────────────┘                                      │
-│                                                                 │
-│  (withdraw 20)                                                  │
-│       │                                                         │
-│       ▼                                                         │
-│  Look up 'balance' → 100                                        │
-│  Compute (- 100 20) → 80                                        │
-│  MODIFY environment: balance → 80                               │
-│  Return 80                                                      │
-│                                                                 │
-│  Global Environment (after):                                    │
-│  ┌──────────────────────┐                                      │
-│  │ "balance" ──────────────► 80   ← Changed!                   │
-│  │ "withdraw" ─────────────► <procedure>                       │
-│  └──────────────────────┘                                      │
-└─────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────┐
+│  ENVIRONMENT MODEL                                            │
+│                                                               │
+│  Global Environment:                                          │
+│  ┌─────────────────────────────────────┐                      │
+│  │ "balance" ───────────► 100          │                      │
+│  │ "withdraw" ──────────► <procedure>  │                      │
+│  └─────────────────────────────────────┘                      │
+│                                                               │
+│  (withdraw 20)                                                │
+│       │                                                       │
+│       ▼                                                       │
+│  Look up 'balance' → 100                                      │
+│  Compute (- 100 20) → 80                                      │
+│  MODIFY environment: balance → 80                             │
+│  Return 80                                                    │
+│                                                               │
+│  Global Environment (after):                                  │
+│  ┌─────────────────────────────────────┐                      │
+│  │ "balance" ───────────► 80  ← Changed!                      │
+│  │ "withdraw" ──────────► <procedure>  │                      │
+│  └─────────────────────────────────────┘                      │
+└───────────────────────────────────────────────────────────────┘
 ```
 
 The key difference: **the name persists**. We can look up `balance`, get its current value, compute a new value, and store it back under the same name. The binding is mutable.
@@ -291,23 +290,23 @@ This leads to two notions of equality:
 - **Identity equality**: Are they the same object?
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                                                                 │
-│   VALUE EQUALITY              IDENTITY EQUALITY                 │
-│                                                                 │
-│   ┌─────────┐ ┌─────────┐     ┌─────────┐                      │
-│   │ bal=100 │ │ bal=100 │     │ bal=100 │                      │
-│   └─────────┘ └─────────┘     └────┬────┘                      │
-│       a           b                │                            │
-│                                    ├── a                        │
-│   Same value, different           │                            │
-│   objects. Changing one           └── b                        │
-│   doesn't affect the other.                                     │
-│                               Same object, two names.           │
-│                               Changing via 'a' is visible       │
-│                               via 'b'.                          │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────┐
+│                                                               │
+│   VALUE EQUALITY              IDENTITY EQUALITY               │
+│                                                               │
+│   ┌─────────┐ ┌─────────┐     ┌─────────┐                     │
+│   │ bal=100 │ │ bal=100 │     │ bal=100 │                     │
+│   └─────────┘ └─────────┘     └────┬────┘                     │
+│       a           b                │                          │
+│                                    ├── a                      │
+│   Same value, different            │                          │
+│   objects. Changing one            └── b                      │
+│   doesn't affect the other.                                   │
+│                               Same object, two names.         │
+│                               Changing via 'a' is visible     │
+│                               via 'b'.                        │
+│                                                               │
+└───────────────────────────────────────────────────────────────┘
 ```
 
 Different languages handle this differently:

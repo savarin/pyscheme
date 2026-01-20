@@ -1,4 +1,4 @@
-# Chapter 3: Lambda & Closures
+# Chapter 3: Lambda + Closures
 
 > *"It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures."*
 > — Alan Perlis
@@ -295,27 +295,27 @@ Later, when `(add5 3)` runs:
 The closure "remembers" that `n` was `5`, even though `make-adder` has long since returned.
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│  <add5 closure>                                         │
-│                                                         │
-│  params: ("x",)                                         │
-│  body:   ("+", "x", "n")                               │
-│  env: ─────────────────────────────────┐               │
-│                                         │               │
-└─────────────────────────────────────────┼───────────────┘
-                                          │
-                                          ▼
-                              ┌───────────────────────┐
-                              │  Environment E1       │
-                              │    "n" → 5            │
-                              └───────────┬───────────┘
-                                          │ enclosing
-                                          ▼
-                              ┌───────────────────────┐
-                              │  Global Environment   │
-                              │    "+" → <add>        │
-                              │    "make-adder" → ... │
-                              └───────────────────────┘
+┌──────────────────────────────────────────────┐
+│  <add5 closure>                              │
+│                                              │
+│  params: ("x",)                              │
+│  body:   ("+", "x", "n")                     │
+│  env: ──────────────────────────┐            │
+│                                 │            │
+└─────────────────────────────────┼────────────┘
+                                  │
+                                  ▼
+                      ┌───────────────────────┐
+                      │  Environment E1       │
+                      │    "n" → 5            │
+                      └───────────┬───────────┘
+                                  │ enclosing
+                                  ▼
+                      ┌───────────────────────┐
+                      │  Global Environment   │
+                      │    "+" → <add>        │
+                      │    "make-adder" → ... │
+                      └───────────────────────┘
 ```
 
 ---
@@ -488,7 +488,7 @@ Let's trace through a complete example of functions returning functions:
 ```
 Global Environment:
 ┌────────────────────────────────────┐
-│ "make-multiplier" → <procedure>   │
+│ "make-multiplier" → <procedure>    │
 │ "*" → <mult>                       │
 └────────────────────────────────────┘
 ```
@@ -519,8 +519,8 @@ Creates closure:
 ```
 Global Environment:
 ┌────────────────────────────────────┐
-│ "make-multiplier" → <procedure>   │
-│ "double" → <closure with E1>      │
+│ "make-multiplier" → <procedure>    │
+│ "double" → <closure with E1>       │
 │ "*" → <mult>                       │
 └────────────────────────────────────┘
 ```

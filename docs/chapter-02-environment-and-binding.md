@@ -1,4 +1,4 @@
-# Chapter 2: Environment & Binding
+# Chapter 2: Environment + Binding
 
 > *"The environment is crucial, because it determines the context in which an expression should be evaluated."*
 > — Structure and Interpretation of Computer Programs
@@ -472,38 +472,38 @@ This pattern is so common that it has a name: the **environment diagram**. It's 
 Here's the full diagram for our `make-adder` example after `add5` is called:
 
 ```
-              GLOBAL ENVIRONMENT
-              ┌────────────────────────────────────────────┐
-              │  "make-adder" ────────────────┐            │
-              │  "add5" ──────────────────────┼──┐         │
-              │  "+" → <add>                  │  │         │
-              │  "-" → <sub>                  │  │         │
-              │  "*" → <mult>                 │  │         │
-              └────────────────────────────────┼──┼─────────┘
-                             ▲                 │  │
-                             │                 │  │
-                ┌────────────┴──────┐          │  │
-                │ <make-adder proc> │◄─────────┘  │
-                │   params: (n)     │             │
-                │   body: (lambda   │             │
-                │         (x)       │             │
-                │         (+ x n))  │             │
-                └───────────────────┘             │
-                                                  │
-              ┌───────────────────────────────────┘
-              │
-              │    ENVIRONMENT E1 (from calling make-adder)
-              │    ┌──────────────────┐
-              │    │  "n" → 5         │
-              │    └────────┬─────────┘
-              │             │ enclosing → GLOBAL
-              │             │
-              │    ┌────────┴──────────┐
-              └───►│ <add5 proc>       │
-                   │   params: (x)     │
-                   │   body: (+ x n)   │
-                   │   env: E1         │
-                   └───────────────────┘
+            GLOBAL ENVIRONMENT
+            ┌──────────────────────────────────────────┐
+            │  "make-adder" ─────────────────┐         │
+            │  "add5" ───────────────────────┼──┐      │
+            │  "+" → <add>                   │  │      │
+            │  "-" → <sub>                   │  │      │
+            │  "*" → <mult>                  │  │      │
+            └────────────────────────────────┼──┼──────┘
+                           ▲                 │  │
+                           │                 │  │
+              ┌────────────┴─────────┐       │  │
+              │ <make-adder proc>    │◄──────┘  │
+              │   params: (n)        │          │
+              │   body: (lambda      │          │
+              │         (x)          │          │
+              │         (+ x n))     │          │
+              └──────────────────────┘          │
+                                                │
+            ┌───────────────────────────────────┘
+            │
+            │   ENVIRONMENT E1 (from calling make-adder)
+            │   ┌──────────────────┐
+            │   │  "n" → 5         │
+            │   └────────┬─────────┘
+            │            │ enclosing → GLOBAL
+            │            │
+            │   ┌────────┴───────────┐
+            └──►│ <add5 proc>        │
+                │   params: (x)      │
+                │   body: (+ x n)    │
+                │   env: E1          │
+                └────────────────────┘
 ```
 
 Each procedure points to the environment where it was defined. When called, it extends *that* environment, not the current one.

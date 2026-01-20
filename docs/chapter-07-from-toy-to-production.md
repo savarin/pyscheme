@@ -93,21 +93,21 @@ The errors are confusing, the behavior is inconsistent, and there's no guidance 
 The production version is 7.5x longer. Where does the code go?
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│  PRODUCTION INTERPRETER: 450 LINES                              │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  Type definitions ............... 15 lines (3%)                │
-│  Exception classes .............. 20 lines (4%)                │
-│  Environment class .............. 45 lines (10%)               │
-│  Built-in operations ............ 70 lines (16%)               │
-│  Validation ..................... 50 lines (11%)               │
-│  Evaluation functions ........... 200 lines (44%)              │
-│  Documentation .................. 50 lines (11%)               │
-│                                                                 │
-│  TOTAL: ~450 lines                                              │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────┐
+│  PRODUCTION INTERPRETER: 450 LINES                    │
+├───────────────────────────────────────────────────────┤
+│                                                       │
+│  Type definitions ............... 15 lines (3%)       │
+│  Exception classes .............. 20 lines (4%)       │
+│  Environment class .............. 45 lines (10%)      │
+│  Built-in operations ............ 70 lines (16%)      │
+│  Validation ..................... 50 lines (11%)      │
+│  Evaluation functions ........... 200 lines (44%)     │
+│  Documentation .................. 50 lines (11%)      │
+│                                                       │
+│  TOTAL: ~450 lines                                    │
+│                                                       │
+└───────────────────────────────────────────────────────┘
 ```
 
 Most of the growth is **validation** and **error handling**. The core logic is similar; the difference is how we handle the edges.
